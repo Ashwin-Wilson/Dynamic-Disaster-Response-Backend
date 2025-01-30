@@ -1,6 +1,7 @@
 //models
 const Admin = require("../model/admin");
-
+const DisasterReport = require("../model/disasterReports");
+const Family = require("../model/family");
 const { setUser } = require("../services/Auth");
 
 async function handleAdminSignup(req, res) {
@@ -73,8 +74,125 @@ async function handleAdminDelete(req, res) {
   }
 }
 
+async function handleDisasterReport(req, res) {
+  const { disaster_title, description, location, admin_id, intensity } =
+    req.body;
+
+  if (
+    !disaster_title ||
+    !description ||
+    !location ||
+    !location.coordinates ||
+    !admin_id ||
+    !intensity
+  ) {
+    return res.status(400).json({
+      message:
+        "All fields (disaster_title, description, location, admin_id, and intensity) are required!",
+    });
+  }
+
+  try {
+    const newDisasterReport = await DisasterReport.create({
+      disaster_title,
+      description,
+      location,
+      admin_id,
+      intensity,
+    });
+
+    return res.status(201).json({
+      message: "Disaster report created successfully",
+      newDisasterReport,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Failed to create disaster report",
+      details: error.message,
+    });
+  }
+}
+
+// Helper function to calculate distance using geospatial queries
+const getNearbyFamilies = async (disasterLocation, radius) => {
+  try {
+    if (
+      !disasterLocation ||
+      !disasterLocation.coordinates ||
+      disasterLocation.coordinates.length !== 2
+    ) {
+      throw new Error("Invalid disaster location coordinates");
+    }
+
+    // Get families within a given radius (in meters)
+    const families = await Family.find({
+      "address.location": {
+        $geoWithin: {
+          $centerSphere: [
+            [disasterLocation.coordinates[0], disasterLocation.coordinates[1]], // [longitude, latitude]
+            radius / 6378.1, // Convert km to radians
+          ],
+        },
+      },
+    });
+
+    return families;
+  } catch (error) {
+    throw new Error("Error fetching nearby families: " + error.message);
+  }
+};
+
+//To remove family duplicate in different ranges
+const removeFamiliesWithinAFromB = (A, B) => {
+  return B.filter((b) => {
+    return !A.some((a) => a.email === b.email);
+  });
+};
+
+async function handleAdminDashboard(req, res) {
+  try {
+    // Get the disaster location (coordinates)
+    const disasterId = req.body.disasterId; // Assuming disaster ID is passed in params
+    const disaster = await DisasterReport.findById(disasterId);
+
+    if (!disaster) {
+      return res.status(404).json({ message: "Disaster report not found" });
+    }
+
+    const disasterLocation = disaster.location; // Disaster location [longitude, latitude]
+
+    //Get families within 5km and 50km radius
+    const familiesWithin5km = await getNearbyFamilies(disasterLocation, 5); // 5km radius
+    let familiesWithin10km = await getNearbyFamilies(disasterLocation, 10);
+    let familiesWithin50km = await getNearbyFamilies(disasterLocation, 50);
+
+    familiesWithin10km = await removeFamiliesWithinAFromB(
+      familiesWithin5km,
+      familiesWithin10km
+    );
+
+    familiesWithin50km = await removeFamiliesWithinAFromB(
+      familiesWithin5km,
+      familiesWithin50km
+    );
+
+    return res.status(200).json({
+      families: {
+        within5km: familiesWithin5km,
+        within10km: familiesWithin10km,
+        within50km: familiesWithin50km,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   handleAdminSignup,
   handleAdminLogin,
   handleAdminDelete,
+  handleDisasterReport,
+  handleAdminDashboard,
 };
