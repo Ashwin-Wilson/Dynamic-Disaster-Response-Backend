@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 
 //connections
@@ -14,6 +15,7 @@ connectMongoDB("mongodb://127.0.0.1:27017/ashwin");
 
 // middlewares
 mongodb: app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true })); //for formdata
 
 //routes
