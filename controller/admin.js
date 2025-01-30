@@ -153,11 +153,13 @@ const removeFamiliesWithinAFromB = (A, B) => {
 async function handleAdminDashboard(req, res) {
   try {
     // Get the disaster location (coordinates)
-    const disasterId = req.body.disasterId; // Assuming disaster ID is passed in params
+    const disasterId = req.headers.disasterid;
     const disaster = await DisasterReport.findById(disasterId);
 
     if (!disaster) {
-      return res.status(404).json({ message: "Disaster report not found" });
+      return res.status(404).json({
+        message: "Disaster report not found",
+      });
     }
 
     const disasterLocation = disaster.location; // Disaster location [longitude, latitude]
