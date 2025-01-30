@@ -1,0 +1,27 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const app = express();
+
+//connections
+const { connectMongoDB } = require("./connections");
+
+//routes
+const adminRouter = require("./routes/admin");
+const familyRouter = require("./routes/family");
+
+//connecting with MongoDB
+connectMongoDB("mongodb://127.0.0.1:27017/ashwin");
+
+// middlewares
+mongodb: app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //for formdata
+
+//routes
+app.use("/admin", adminRouter);
+app.use("/family", familyRouter);
+
+app.get("/", (req, res) => {
+  return res.end("Ashwin Wilson");
+});
+
+app.listen(8000, (req, res) => console.log("Server is running"));
