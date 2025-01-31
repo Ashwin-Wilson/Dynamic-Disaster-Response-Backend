@@ -180,6 +180,7 @@ async function handleAdminDashboard(req, res) {
     );
 
     return res.status(200).json({
+      disaster_report: disaster,
       families: {
         within5km: familiesWithin5km,
         within10km: familiesWithin10km,
