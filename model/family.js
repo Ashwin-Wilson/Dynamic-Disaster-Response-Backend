@@ -93,7 +93,6 @@ const familySchema = new mongoose.Schema(
         type: String,
         enum: ["permanent", "temporary", "makeshift"],
         default: "permanent",
-        required: true,
       },
       details: String,
     },
@@ -149,6 +148,9 @@ const familySchema = new mongoose.Schema(
       phone: String,
       alternate_phone: String,
       emergency_contact: String,
+    },
+    distance_from_main_road: {
+      type: String,
     },
     last_updated: {
       type: Date,
