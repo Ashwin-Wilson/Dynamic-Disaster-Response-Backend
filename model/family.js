@@ -59,7 +59,6 @@ const familySchema = new mongoose.Schema(
     ],
     total_members: {
       type: Number,
-      required: true,
     },
     address: {
       street: String,

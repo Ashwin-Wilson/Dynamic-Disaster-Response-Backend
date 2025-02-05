@@ -192,10 +192,22 @@ async function handleAdminDashboard(req, res) {
   }
 }
 
+async function handleGetAllFamilies(req, res) {
+  try {
+    const families = await Family.find();
+    console.log(families);
+    res.status(200).json({ families });
+  } catch (error) {
+    res.status(500).json({ message: "Unable to fetch families!" });
+    console.log(error);
+  }
+}
+
 module.exports = {
   handleAdminSignup,
   handleAdminLogin,
   handleAdminDelete,
   handleDisasterReport,
   handleAdminDashboard,
+  handleGetAllFamilies,
 };

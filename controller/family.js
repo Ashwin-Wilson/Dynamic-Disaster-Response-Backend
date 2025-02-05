@@ -1,20 +1,12 @@
 const Family = require("../model/family");
 const bcrypt = require("bcrypt");
-const { setUser } = require("../services/Auth");
+const { setUser, getUser } = require("../services/Auth");
 
 // Family Signup
 async function handleFamilySignup(req, res) {
-  const { family_name, email, password, role, total_members, address } =
-    req.body;
+  const { family_name, email, password, role, address } = req.body;
 
-  if (
-    !family_name ||
-    !email ||
-    !password ||
-    !role ||
-    !total_members ||
-    !address
-  ) {
+  if (!family_name || !email || !password || !role || !address) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
@@ -31,7 +23,6 @@ async function handleFamilySignup(req, res) {
       email,
       password: hashedPassword,
       role,
-      total_members,
       address,
     });
 
@@ -80,13 +71,14 @@ async function handleFamilyLogin(req, res) {
 
 // Family Update Information
 async function handleFamilyUpdate(req, res) {
-  const { familyId, updates } = req.body;
+  const { token, updates } = req.body;
 
-  if (!familyId || !updates) {
+  if (!token || !updates) {
     return res
       .status(400)
       .json({ message: "Family ID and update data are required!" });
   }
+  const familyId = getUser(token).id;
 
   try {
     const updatedFamily = await Family.findByIdAndUpdate(familyId, updates, {
