@@ -8,7 +8,7 @@ const {
 } = require("../controller/family");
 
 router.post("/signup", handleFamilySignup);
-router.get("/login", handleFamilyLogin);
+router.post("/login", handleFamilyLogin);
 router.post("/update", handleFamilyUpdate);
 // router.delete("/remove-admin", checkAuth("family"), handleFamilyDelete);
 
