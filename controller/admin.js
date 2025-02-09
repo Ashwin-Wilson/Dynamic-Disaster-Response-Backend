@@ -24,7 +24,7 @@ async function handleAdminSignup(req, res) {
     return res
       .status(200)
       .header({ token })
-      .json({ message: "Admin signed up successfully" });
+      .json({ message: "Admin signed up successfully", token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -32,10 +32,11 @@ async function handleAdminSignup(req, res) {
 
 async function handleAdminLogin(req, res) {
   const { email, password } = req.body;
+  console.log(req.body);
   if ((!email, !password)) {
     return res
       .status(400)
-      .json({ message: "Email and Password are required!", he: req.body });
+      .json({ message: "Email and Password are required!" });
   }
 
   try {
@@ -49,7 +50,7 @@ async function handleAdminLogin(req, res) {
     return res
       .status(200)
       .header({ token })
-      .json({ messae: "Admin logged in successfully" });
+      .json({ messae: "Admin logged in successfully", token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

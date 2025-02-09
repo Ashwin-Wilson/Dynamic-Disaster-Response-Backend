@@ -13,7 +13,7 @@ const {
 } = require("../controller/admin");
 
 router.post("/signup", handleAdminSignup);
-router.get("/login", handleAdminLogin);
+router.post("/login", handleAdminLogin);
 router.delete("/remove-admin", checkAuth("admin"), handleAdminDelete);
 router.post("/report-disaster", handleDisasterReport);
 router.get("/dashboard", handleAdminDashboard);
