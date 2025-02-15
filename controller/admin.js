@@ -20,11 +20,11 @@ async function handleAdminSignup(req, res) {
     });
 
     const token = setUser(result);
-
+    const adminId = result._id;
     return res
       .status(200)
       .header({ token })
-      .json({ message: "Admin signed up successfully", token });
+      .json({ message: "Admin signed up successfully", token, adminId });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -32,7 +32,6 @@ async function handleAdminSignup(req, res) {
 
 async function handleAdminLogin(req, res) {
   const { email, password } = req.body;
-  console.log(req.body);
   if ((!email, !password)) {
     return res
       .status(400)
@@ -46,11 +45,12 @@ async function handleAdminLogin(req, res) {
     }
 
     const token = setUser(user);
+    const adminId = user._id;
 
     return res
       .status(200)
       .header({ token })
-      .json({ messae: "Admin logged in successfully", token });
+      .json({ message: "Admin logged in successfully", token, adminId });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -64,7 +64,7 @@ async function handleAdminDelete(req, res) {
 
   try {
     const result = await Admin.deleteOne({ _id: req.body.id });
-    console.log(req.body.user);
+
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "Item not found" });
     }
@@ -76,20 +76,10 @@ async function handleAdminDelete(req, res) {
 }
 
 async function handleDisasterReport(req, res) {
-  const { disaster_title, description, location, admin_id, intensity } =
-    req.body;
-
-  if (
-    !disaster_title ||
-    !description ||
-    !location ||
-    !location.coordinates ||
-    !admin_id ||
-    !intensity
-  ) {
+  const { disaster_title, description, author, location, intensity } = req.body;
+  if (!disaster_title || !description || !author || !location || !intensity) {
     return res.status(400).json({
-      message:
-        "All fields (disaster_title, description, location, admin_id, and intensity) are required!",
+      message: "All fields are required!",
     });
   }
 
@@ -98,7 +88,7 @@ async function handleDisasterReport(req, res) {
       disaster_title,
       description,
       location,
-      admin_id,
+      author,
       intensity,
     });
 
@@ -196,7 +186,7 @@ async function handleAdminDashboard(req, res) {
 async function handleGetAllFamilies(req, res) {
   try {
     const families = await Family.find();
-    console.log(families);
+
     res.status(200).json({ families });
   } catch (error) {
     res.status(500).json({ message: "Unable to fetch families!" });
