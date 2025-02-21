@@ -21,11 +21,6 @@ const disasterReportSchema = new mongoose.Schema(
         required: true,
       },
     },
-    // admin_id: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "admins",
-    //   required: true,
-    // },
     author: {
       role: {
         type: String,

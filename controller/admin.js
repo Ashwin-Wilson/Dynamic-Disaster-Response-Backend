@@ -194,6 +194,17 @@ async function handleGetAllFamilies(req, res) {
   }
 }
 
+async function handleGetAllDisasterReports(req, res) {
+  try {
+    const disasterReports = await DisasterReport.find();
+
+    res.status(200).json({ disasterReports });
+  } catch (error) {
+    res.status(500).json({ message: "Unable to fetch Disaster Reports!" });
+    console.log(error);
+  }
+}
+
 module.exports = {
   handleAdminSignup,
   handleAdminLogin,
@@ -201,4 +212,5 @@ module.exports = {
   handleDisasterReport,
   handleAdminDashboard,
   handleGetAllFamilies,
+  handleGetAllDisasterReports,
 };
