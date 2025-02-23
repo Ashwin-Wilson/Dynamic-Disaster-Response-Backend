@@ -9,6 +9,7 @@ const { connectMongoDB } = require("./connections");
 //routes
 const adminRouter = require("./routes/admin");
 const familyRouter = require("./routes/family");
+const driverRouter = require("./routes/driver");
 
 //connecting with MongoDB
 connectMongoDB("mongodb://127.0.0.1:27017/ashwin");
@@ -21,6 +22,8 @@ app.use(express.urlencoded({ extended: true })); //for formdata
 //routes
 app.use("/admin", adminRouter);
 app.use("/family", familyRouter);
+app.use("/driver", driverRouter);
+app.use("/volunteer", driverRouter);
 
 app.get("/", (req, res) => {
   return res.end("Ashwin Wilson");
