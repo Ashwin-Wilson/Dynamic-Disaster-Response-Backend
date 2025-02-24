@@ -64,22 +64,26 @@ async function handleDriverLogin(req, res) {
   }
 
   try {
-    const driver = await Driver.findOne({ email });
+    const driver = await Driver.findOne({ email, password });
     if (!driver) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, driver.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
+    // const isMatch = await bcrypt.compare(password, driver.password);
+    // if (!isMatch) {
+    //   return res.status(401).json({ message: "Invalid email or password" });
+    // }
 
     const token = setUser(driver);
 
     return res
       .status(200)
       .header({ token })
-      .json({ message: "Driver logged in successfully", token });
+      .json({
+        message: "Driver logged in successfully",
+        token,
+        driverId: driver._id,
+      });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

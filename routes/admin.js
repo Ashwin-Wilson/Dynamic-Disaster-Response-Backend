@@ -10,6 +10,7 @@ const {
   handleDisasterReport,
   handleAdminDashboard,
   handleGetAllFamilies,
+  handleGetAllDrivers,
   handleGetAllDisasterReports,
 } = require("../controller/admin");
 
@@ -19,6 +20,7 @@ router.delete("/remove-admin", checkAuth("admin"), handleAdminDelete);
 router.post("/report-disaster", handleDisasterReport);
 router.get("/dashboard", handleAdminDashboard);
 router.get("/get-all-families", handleGetAllFamilies);
+router.get("/get-all-drivers", handleGetAllDrivers);
 router.get("/get-all-disaster-reports", handleGetAllDisasterReports);
 //following code is used to perform admin privilage actions
 

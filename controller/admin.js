@@ -2,6 +2,7 @@
 const Admin = require("../model/admin");
 const DisasterReport = require("../model/disasterReports");
 const Family = require("../model/family");
+const Driver = require("../model/driver");
 const { setUser } = require("../services/Auth");
 
 async function handleAdminSignup(req, res) {
@@ -194,6 +195,17 @@ async function handleGetAllFamilies(req, res) {
   }
 }
 
+async function handleGetAllDrivers(req, res) {
+  try {
+    const drivers = await Driver.find();
+
+    res.status(200).json({ drivers });
+  } catch (error) {
+    res.status(500).json({ message: "Unable to fetch drivers!" });
+    console.log(error);
+  }
+}
+
 async function handleGetAllDisasterReports(req, res) {
   try {
     const disasterReports = await DisasterReport.find();
@@ -212,5 +224,6 @@ module.exports = {
   handleDisasterReport,
   handleAdminDashboard,
   handleGetAllFamilies,
+  handleGetAllDrivers,
   handleGetAllDisasterReports,
 };
