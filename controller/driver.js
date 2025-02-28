@@ -1,4 +1,5 @@
 const Driver = require("../model/driver");
+const { Shelter } = require("../model/shelter");
 const bcrypt = require("bcrypt");
 const { setUser, getUser } = require("../services/Auth");
 
@@ -76,14 +77,11 @@ async function handleDriverLogin(req, res) {
 
     const token = setUser(driver);
 
-    return res
-      .status(200)
-      .header({ token })
-      .json({
-        message: "Driver logged in successfully",
-        token,
-        driverId: driver._id,
-      });
+    return res.status(200).header({ token }).json({
+      message: "Driver logged in successfully",
+      token,
+      driverId: driver._id,
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -215,6 +213,19 @@ async function handleGetDriversByArea(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+async function handleGetAllShelters(req, res) {
+  try {
+    const Shelters = await Shelter.find();
+    if (!Shelters) {
+      return res.status(400).json({ message: "Shelters no found", Shelters });
+    }
+    return res
+      .status(200)
+      .json({ message: "Shelters fetched successfully", Shelters });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 module.exports = {
   handleDriverSignup,
@@ -223,4 +234,5 @@ module.exports = {
   handleVehicleConditionUpdate,
   handleAvailabilityUpdate,
   handleGetDriversByArea,
+  handleGetAllShelters,
 };
