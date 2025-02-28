@@ -1,11 +1,11 @@
 const Caretaker = require("../model/caretaker");
-const Shelter = require("../model/shelter");
+const { Shelter, ShelterReport } = require("../model/shelter");
 const bcrypt = require("bcrypt");
 const { setUser, getUser } = require("../services/Auth");
+const { response } = require("express");
 
 // Caretaker Signup
 async function handleCaretakerSignup(req, res) {
-  console.log(req.body);
   const {
     full_name,
     email,
@@ -134,7 +134,6 @@ async function handleCaretakerUpdate(req, res) {
 }
 
 async function handleShelterCreate(req, res) {
-  console.log(req.body);
   const {
     shelter_name,
     address,
@@ -245,17 +244,72 @@ async function handleGetShelterById(req, res) {
       shelter: existingShelter,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 }
 
-// async function handleUpdateShelter(req, res) {}
+async function handleShelterReports(req, res) {
+  const { shelterId, updates } = req.body;
+
+  if (!shelterId || !updates) {
+    res.status(400).json({ message: "shelterId and updates are required" });
+  }
+  try {
+    const newReport = await ShelterReport.create({
+      title: updates.title,
+      description: updates.description,
+    });
+
+    const updatedShelter = await Shelter.findByIdAndUpdate(
+      shelterId,
+      { $push: { reports: newReport } },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedShelter) {
+      return res.status(404).json({ message: "Shelter not found!" });
+    }
+
+    return res.status(200).json({
+      message: "Shelter details updated successfully",
+      updatedShelter,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function handleShelterUpdate(req, res) {
+  const { shelterId, updates } = req.body;
+  if (!shelterId || !updates) {
+    return res
+      .status(400)
+      .json({ message: "ShelterId and updates are required" });
+  }
+  try {
+    const updatedShelter = await Shelter.findByIdAndUpdate(shelterId, updates, {
+      new: true,
+    });
+    if (updatedShelter) {
+      return res.status(200).json({
+        message: "Shelter details updated successfully",
+        shelter: updatedShelter,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: error.message });
+  }
+}
 
 module.exports = {
   handleCaretakerSignup,
   handleCaretakerLogin,
   handleCaretakerUpdate,
   handleShelterCreate,
+  handleShelterUpdate,
+  handleShelterReports,
   handleGetShelterById,
 };

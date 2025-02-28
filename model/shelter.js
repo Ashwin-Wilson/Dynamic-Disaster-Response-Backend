@@ -135,5 +135,6 @@ const shelterSchema = new mongoose.Schema(
 shelterSchema.index({ "address.location": "2dsphere" });
 
 const Shelter = mongoose.model("shelter", shelterSchema);
+const ShelterReport = mongoose.model("shelterReport", shelterReportSchema);
 
-module.exports = Shelter;
+module.exports = { Shelter, ShelterReport };
