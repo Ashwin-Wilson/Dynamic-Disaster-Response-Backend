@@ -10,6 +10,7 @@ const { connectMongoDB } = require("./connections");
 const adminRouter = require("./routes/admin");
 const familyRouter = require("./routes/family");
 const driverRouter = require("./routes/driver");
+const volunteerRouter = require("./routes/volunteer");
 const caretakerRouter = require("./routes/caretaker");
 
 //connecting with MongoDB
@@ -24,7 +25,7 @@ app.use(express.urlencoded({ extended: true })); //for formdata
 app.use("/admin", adminRouter);
 app.use("/family", familyRouter);
 app.use("/driver", driverRouter);
-app.use("/volunteer", driverRouter);
+app.use("/volunteer", volunteerRouter);
 app.use("/caretaker", caretakerRouter);
 
 app.get("/", (req, res) => {

@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const {
-  handleFamilySignup,
-  handleFamilyLogin,
-  handleFamilyUpdate,
-} = require("../controller/family");
+  handleVolunteerSignup,
+  handleVolunteerLogin,
+  handleGetAllVolunteers,
+} = require("../controller/volunteer");
 
-router.post("/signup", handleFamilySignup);
+router.post("/signup", handleVolunteerSignup);
+router.post("/login", handleVolunteerLogin);
+router.get("/get-all-volunteers", handleGetAllVolunteers);
 
 module.exports = router;
