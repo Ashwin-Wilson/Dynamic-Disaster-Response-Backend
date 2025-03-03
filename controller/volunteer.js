@@ -1,4 +1,5 @@
 const Volunteer = require("../model/volunteer");
+const Roadblock = require("../model/roadBlock");
 const { setUser } = require("../services/Auth");
 
 async function handleVolunteerSignup(req, res) {
@@ -103,8 +104,43 @@ async function handleGetAllVolunteers(req, res) {
   }
 }
 
+async function reportRoadBlock(req, res) {
+  const { volunteerId, location } = req.body;
+  if (!volunteerId || !location) {
+    return res
+      .status(400)
+      .json({ message: "Volunteer ID and road block are required" });
+  }
+  try {
+    const newRoadBlock = await Roadblock.create({
+      reported_by: volunteerId,
+      location: location,
+    });
+    return res.status(200).json({ message: "Block saved successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getAllRoadBlocks(req, res) {
+  try {
+    const roadBlocks = await Roadblock.find();
+    console.log(roadBlocks);
+    if (!roadBlocks) {
+      res.status(400).json({ message: "No road Blocks found in DB" });
+    }
+    res
+      .status(200)
+      .json({ message: "Road Blocks retrieved successfully", roadBlocks });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   handleVolunteerSignup,
   handleVolunteerLogin,
   handleGetAllVolunteers,
+  reportRoadBlock,
+  getAllRoadBlocks,
 };
