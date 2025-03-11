@@ -59,10 +59,11 @@ async function handleCaretakerSignup(req, res) {
 
     const token = setUser(newCaretaker);
 
-    return res
-      .status(201)
-      .header({ token })
-      .json({ message: "Caretaker registered successfully", token });
+    return res.status(201).header({ token }).json({
+      message: "Caretaker registered successfully",
+      token,
+      newCaretaker,
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -94,7 +95,7 @@ async function handleCaretakerLogin(req, res) {
     return res
       .status(200)
       .header({ token })
-      .json({ message: "Caretaker logged in successfully", token });
+      .json({ message: "Caretaker logged in successfully", token, caretaker });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

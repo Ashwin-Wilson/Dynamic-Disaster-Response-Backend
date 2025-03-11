@@ -63,7 +63,7 @@ async function handleFamilyLogin(req, res) {
     return res
       .status(200)
       .header({ token })
-      .json({ message: "Family logged in successfully", token });
+      .json({ message: "Family logged in successfully", token, family });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

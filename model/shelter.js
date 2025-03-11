@@ -51,6 +51,10 @@ const shelterSchema = new mongoose.Schema(
         },
       },
     },
+    created_by: {
+      type: String,
+      require: true,
+    },
     capacity: {
       max_capacity: {
         type: Number,
