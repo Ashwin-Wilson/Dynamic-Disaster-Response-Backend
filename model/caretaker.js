@@ -34,6 +34,11 @@ const caretakerSchema = new mongoose.Schema(
       },
     },
 
+    shelter_id: {
+      type: String,
+      default: null,
+    },
+
     // Experience and Skills
     training: {
       first_aid: {

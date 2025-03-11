@@ -8,6 +8,7 @@ const {
   handleShelterUpdate,
   handleShelterReports,
   handleGetShelterById,
+  handleGetCaretakerById,
 } = require("../controller/caretaker");
 
 router.post("/signup", handleCaretakerSignup);
@@ -17,5 +18,6 @@ router.post("/shelter/create", handleShelterCreate);
 router.post("/shelter/update", handleShelterUpdate);
 router.post("/shelter/report", handleShelterReports);
 router.get("/shelter", handleGetShelterById);
+router.get("/get-caretaker-by-id", handleGetCaretakerById);
 
 module.exports = router;

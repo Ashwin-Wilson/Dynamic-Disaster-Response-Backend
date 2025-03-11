@@ -134,6 +134,21 @@ async function handleCaretakerUpdate(req, res) {
   }
 }
 
+async function handleGetCaretakerById(req, res) {
+  const caretakerId = req.header("caretakerId");
+  try {
+    const existingCaretaker = await Caretaker.findOne({
+      _id: caretakerId,
+    });
+    res.status(200).json({
+      message: "caretaker found successfully",
+      caretaker: existingCaretaker,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function handleShelterCreate(req, res) {
   const {
     shelter_name,
@@ -313,4 +328,5 @@ module.exports = {
   handleShelterUpdate,
   handleShelterReports,
   handleGetShelterById,
+  handleGetCaretakerById,
 };
