@@ -4,9 +4,17 @@ const { setUser, getUser } = require("../services/Auth");
 
 // Family Signup
 async function handleFamilySignup(req, res) {
-  const { family_name, email, password, role, address } = req.body;
+  const { family_name, email, password, role, address, house_number } =
+    req.body;
 
-  if (!family_name || !email || !password || !role || !address) {
+  if (
+    !family_name ||
+    !email ||
+    !password ||
+    !role ||
+    !address ||
+    !house_number
+  ) {
     return res.status(400).json({ message: "All fields are required!" });
   }
 
@@ -21,6 +29,7 @@ async function handleFamilySignup(req, res) {
     const newFamily = await Family.create({
       family_name,
       email,
+      house_number,
       password: hashedPassword,
       role,
       address,

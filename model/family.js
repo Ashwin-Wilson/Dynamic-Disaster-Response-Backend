@@ -19,6 +19,10 @@ const familySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    house_number: {
+      type: String,
+      required: true,
+    },
     family_members: [
       {
         name: {
