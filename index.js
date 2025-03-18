@@ -14,7 +14,10 @@ const volunteerRouter = require("./routes/volunteer");
 const caretakerRouter = require("./routes/caretaker");
 
 //connecting with MongoDB
-connectMongoDB("mongodb://127.0.0.1:27017/ashwin");
+// connectMongoDB("mongodb://127.0.0.1:27017/ashwin");
+connectMongoDB(
+  "mongodb+srv://Ashwin:ashwin123@dynamic-disaster-respon.gg135.mongodb.net/?retryWrites=true&w=majority&appName=Dynamic-Disaster-Response"
+);
 
 // middlewares
 mongodb: app.use(express.json());
