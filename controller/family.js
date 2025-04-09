@@ -105,9 +105,24 @@ async function handleFamilyUpdate(req, res) {
     return res.status(500).json({ error: error.message });
   }
 }
+async function handleGetFamilyById(req, res) {
+  const familyId = req.header("familyId");
+  try {
+    const existingFamily = await Family.findOne({
+      _id: familyId,
+    });
+    res.status(200).json({
+      message: "Family found successfully",
+      family: existingFamily,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 module.exports = {
   handleFamilySignup,
   handleFamilyLogin,
   handleFamilyUpdate,
+  handleGetFamilyById,
 };
